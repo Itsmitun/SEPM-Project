@@ -91,6 +91,14 @@
                 <option value="Entertainment">Entertainment</option>
                 <option value="Other">Other</option>
             </select>
+            <label>
+                <input type="checkbox" id="recurring-expense"> Recurring
+            </label>
+            <select id="recurring-frequency" enabled>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
             <button type="submit">Add Expense</button>
         </form>
 
@@ -117,6 +125,24 @@
             const expenseForm = document.getElementById("expense-form");
             const expenseList = document.getElementById("expense-list");
             const totalAmount = document.getElementById("total-amount");
+            const recurringCheckbox = document.getElementById("recurring-expense");
+            const recurringFrequency = document.getElementById("recurring-frequency");
+
+            recurringCheckbox.addEventListener("change", function() {
+                recurringFrequency.disabled = !recurringCheckbox.checked;
+            });
+            function addExpense(name, amount, category, recurring, frequency) {
+                const listItem = document.createElement("li");
+                listItem.textContent = `${name} - $${amount} (${category})`;
+                expenseList.appendChild(listItem);
+                totalAmount.textContent = (parseFloat(totalAmount.textContent) + parseFloat(amount)).toFixed(2);
+                
+                if (recurring) {
+                    const interval = frequency === "daily" ? 86400000 : frequency === "weekly" ? 604800000 : 2592000000;
+                    setInterval(() => addExpense(name, amount, category, false, null), interval);
+                }
+            }
+
 
             // Signup Logic
             signupForm.addEventListener("submit", function (event) {
