@@ -106,6 +106,74 @@
         <button type="submit">Submit</button>
     </form>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const signupForm = document.getElementById("signup-form");
+            const loginForm = document.getElementById("login-form");
+            const appSection = document.getElementById("app-section");
+            const signupSection = document.getElementById("signup-section");
+            const loginSection = document.getElementById("login-section");
+            const logoutButton = document.getElementById("logout-button");
+            const expenseForm = document.getElementById("expense-form");
+            const expenseList = document.getElementById("expense-list");
+            const totalAmount = document.getElementById("total-amount");
+
+            // Signup Logic
+            signupForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const email = document.getElementById("signup-email").value;
+                const password = document.getElementById("signup-password").value;
+                if (email && password) {
+                    localStorage.setItem("userEmail", email);
+                    localStorage.setItem("userPassword", password);
+                    alert("Signup successful! Please log in.");
+                    signupSection.style.display = "none";
+                    loginSection.style.display = "block";
+                }
+            });
+
+            // Login Logic
+            loginForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const email = document.getElementById("login-email").value;
+                const password = document.getElementById("login-password").value;
+                const storedEmail = localStorage.getItem("userEmail");
+                const storedPassword = localStorage.getItem("userPassword");
+                if (email === storedEmail && password === storedPassword) {
+                    alert("Login successful!");
+                    showApp();
+                } else {
+                    alert("Invalid credentials. Please try again.");
+                }
+            });
+
+            // Show the Expense Tracker
+            function showApp() {
+                loginSection.style.display = "none";
+                signupSection.style.display = "none";
+                appSection.style.display = "block";
+            }
+
+            // Logout Logic
+            logoutButton.addEventListener("click", function () {
+                appSection.style.display = "none";
+                loginSection.style.display = "block";
+            });
+
+            // Expense Form Submission
+            expenseForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const name = document.getElementById("expense-name").value;
+                const amount = document.getElementById("expense-amount").value;
+                const category = document.getElementById("expense-category").value;
+                if (name && amount) {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${name} - $${amount} (${category})`;
+                    expenseList.appendChild(listItem);
+                    totalAmount.textContent = (parseFloat(totalAmount.textContent) + parseFloat(amount)).toFixed(2);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
