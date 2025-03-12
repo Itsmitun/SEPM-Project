@@ -1,50 +1,89 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
     text-align: center;
     margin: 0;
     padding: 20px;
 }
+
+/* Modern container with glassmorphism effect */
 .container {
     max-width: 400px;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     margin: auto;
+    transition: transform 0.3s ease-in-out;
 }
+
+.container:hover {
+    transform: scale(1.03);
+}
+
+/* Stylish headings */
 h1, h2 {
-    color: #333;
+    color: #fff;
 }
+
+/* Input fields with modern look */
 form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
+
 input, select, button, textarea {
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    outline: none;
+    transition: all 0.3s ease;
 }
+
+input::placeholder, textarea::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* Glow effect on focus */
+input:focus, textarea:focus {
+    border: 2px solid #fff;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Modernized button with hover effects */
 button {
-    background-color: #28a745;
+    background: linear-gradient(to right, #ff416c, #ff4b2b);
     color: white;
     border: none;
     cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(255, 75, 43, 0.5);
 }
+
 button:hover {
-    background-color: #218838;
+    background: linear-gradient(to right, #ff4b2b, #ff416c);
+    box-shadow: 0 6px 15px rgba(255, 75, 43, 0.7);
+    transform: translateY(-2px);
 }
+
+/* Modern list styling */
 ul {
     list-style-type: none;
     padding: 0;
 }
+
 li {
-    background: #f9f9f9;
-    padding: 10px;
-    margin: 5px 0;
-    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.3);
+    padding: 12px;
+    margin: 6px 0;
+    border-radius: 8px;
     display: flex;
     justify-content: space-between;
+    color: #fff;
 }
