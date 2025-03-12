@@ -91,6 +91,14 @@
                 <option value="Entertainment">Entertainment</option>
                 <option value="Other">Other</option>
             </select>
+            <label>
+                <input type="checkbox" id="recurring-expense"> Recurring
+            </label>
+            <select id="recurring-frequency" enabled>
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly">Monthly</option>
+            </select>
             <button type="submit">Add Expense</button>
         </form>
 
@@ -106,6 +114,92 @@
         <button type="submit">Submit</button>
     </form>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const signupForm = document.getElementById("signup-form");
+            const loginForm = document.getElementById("login-form");
+            const appSection = document.getElementById("app-section");
+            const signupSection = document.getElementById("signup-section");
+            const loginSection = document.getElementById("login-section");
+            const logoutButton = document.getElementById("logout-button");
+            const expenseForm = document.getElementById("expense-form");
+            const expenseList = document.getElementById("expense-list");
+            const totalAmount = document.getElementById("total-amount");
+            const recurringCheckbox = document.getElementById("recurring-expense");
+            const recurringFrequency = document.getElementById("recurring-frequency");
+
+            recurringCheckbox.addEventListener("change", function() {
+                recurringFrequency.disabled = !recurringCheckbox.checked;
+            });
+            function addExpense(name, amount, category, recurring, frequency) {
+                const listItem = document.createElement("li");
+                listItem.textContent = `${name} - $${amount} (${category})`;
+                expenseList.appendChild(listItem);
+                totalAmount.textContent = (parseFloat(totalAmount.textContent) + parseFloat(amount)).toFixed(2);
+                
+                if (recurring) {
+                    const interval = frequency === "daily" ? 86400000 : frequency === "weekly" ? 604800000 : 2592000000;
+                    setInterval(() => addExpense(name, amount, category, false, null), interval);
+                }
+            }
+
+
+            // Signup Logic
+            signupForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const email = document.getElementById("signup-email").value;
+                const password = document.getElementById("signup-password").value;
+                if (email && password) {
+                    localStorage.setItem("userEmail", email);
+                    localStorage.setItem("userPassword", password);
+                    alert("Signup successful! Please log in.");
+                    signupSection.style.display = "none";
+                    loginSection.style.display = "block";
+                }
+            });
+
+            // Login Logic
+            loginForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const email = document.getElementById("login-email").value;
+                const password = document.getElementById("login-password").value;
+                const storedEmail = localStorage.getItem("userEmail");
+                const storedPassword = localStorage.getItem("userPassword");
+                if (email === storedEmail && password === storedPassword) {
+                    alert("Login successful!");
+                    showApp();
+                } else {
+                    alert("Invalid credentials. Please try again.");
+                }
+            });
+
+            // Show the Expense Tracker
+            function showApp() {
+                loginSection.style.display = "none";
+                signupSection.style.display = "none";
+                appSection.style.display = "block";
+            }
+
+            // Logout Logic
+            logoutButton.addEventListener("click", function () {
+                appSection.style.display = "none";
+                loginSection.style.display = "block";
+            });
+
+            // Expense Form Submission
+            expenseForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                const name = document.getElementById("expense-name").value;
+                const amount = document.getElementById("expense-amount").value;
+                const category = document.getElementById("expense-category").value;
+                if (name && amount) {
+                    const listItem = document.createElement("li");
+                    listItem.textContent = `${name} - $${amount} (${category})`;
+                    expenseList.appendChild(listItem);
+                    totalAmount.textContent = (parseFloat(totalAmount.textContent) + parseFloat(amount)).toFixed(2);
+                }
+            });
+        });
+    </script>
 </body>
 </html>
