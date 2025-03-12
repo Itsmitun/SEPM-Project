@@ -1,61 +1,68 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
     background: linear-gradient(to right, #6a11cb, #2575fc);
     text-align: center;
     margin: 0;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
 }
 
-/* Modern container with glassmorphism effect */
+/* Restrict Logout Button */
+#logout-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(to right, #ff4b2b, #ff416c);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    width: auto;  /* Fix width issue */
+    max-width: 150px;
+    text-align: center;
+    box-shadow: 0px 4px 10px rgba(255, 75, 43, 0.5);
+    transition: transform 0.3s;
+}
+
+#logout-button:hover {
+    transform: scale(1.05);
+}
+
+/* Container Styling */
 .container {
-    max-width: 400px;
+    max-width: 500px;
     background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(12px);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     margin: auto;
     transition: transform 0.3s ease-in-out;
 }
 
-.container:hover {
-    transform: scale(1.03);
-}
-
-/* Stylish headings */
-h1, h2 {
-    color: #000000;
-}
-
-/* Input fields with modern look */
+/* Form Inputs & Spacing */
 form {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
+    align-items: center;
 }
 
 input, select, button, textarea {
-    padding: 12px;
+    width: 92%;
+    padding: 14px;
     font-size: 16px;
     border: none;
-    border-radius: 8px;
-    background: #ffffff4d;
-    color: #000000;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
     outline: none;
     transition: all 0.3s ease;
 }
 
-input::placeholder, textarea::placeholder {
-    color: #000000b3;
-}
-
-/* Glow effect on focus */
-input:focus, textarea:focus {
-    border: 2px solid #fff;
-    background: rgba(255, 255, 255, 0.5);
-}
-
-/* Modernized button with hover effects */
+/* Button Styling */
 button {
     background: linear-gradient(to right, #ff416c, #ff4b2b);
     color: white;
@@ -64,6 +71,8 @@ button {
     font-weight: bold;
     transition: all 0.3s ease-in-out;
     box-shadow: 0 4px 10px rgba(255, 75, 43, 0.5);
+    padding: 12px 16px;
+    width: 95%;
 }
 
 button:hover {
@@ -72,42 +81,56 @@ button:hover {
     transform: translateY(-2px);
 }
 
-/* Modern list styling */
+/* Expense List Styling */
 ul {
     list-style-type: none;
     padding: 0;
+    margin-top: 20px;
+    width: 100%;
 }
 
 li {
     background: rgba(255, 255, 255, 0.3);
-    padding: 12px;
-    margin: 6px 0;
-    border-radius: 8px;
+    padding: 16px;
+    margin: 10px 0;
+    border-radius: 12px;
     display: flex;
     justify-content: space-between;
-    color: #000000;
+    align-items: center;
+    color: #fff;
+    font-weight: 500;
+    transition: all 0.3s ease-in-out;
+    font-size: 16px;
 }
 
+/* Align Text Inside Expense List */
+.expense-text {
+    flex-grow: 1;
+    text-align: left;
+    padding-right: 12px;
+}
+
+/* Edit & Delete Buttons */
 .button-container {
     display: flex;
-    gap: 8px; /* Space between buttons */
+    gap: 8px;
 }
 
 button.edit, button.delete {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #edededcc;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    background: #edededcc;
-    box-shadow: 0 4px 10px rgba(255, 75, 43, 0.5);
     border: none;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
 }
 
 button.edit:hover, button.delete:hover {
-    transform: scale(1.1);
+    transform: scale(1.15);
     background: rgba(255, 75, 43, 1);
 }
+
