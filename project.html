@@ -132,7 +132,7 @@
                 let total = 0;
                 getExpenses().forEach(expense => {
                     const listItem = document.createElement("li");
-                    listItem.textContent = `${expense.name} - $${expense.amount} (${expense.category})${expense.recurring ? ` - Recurs ${expense.frequency}` : ''}`;
+                    listItem.textContent = `${expense.name} - ₹${expense.amount} (${expense.category})${expense.recurring ? ` - Recurs ${expense.frequency}` : ''}`;
                     expenseList.appendChild(listItem);
                     total += parseFloat(expense.amount);
                 });
