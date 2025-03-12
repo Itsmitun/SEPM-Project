@@ -23,22 +23,98 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function addExpense(name, amount, category, recurring, frequency) {
         const expenses = getExpenses();
-        const newExpense = { name, amount, category, recurring, frequency, date: new Date().toISOString() };
+        const newExpense = { id: Date.now(), name, amount, category, recurring, frequency, date: new Date().toISOString() };
         expenses.push(newExpense);
         saveExpenses(expenses);
         renderExpenses();
     }
 
+    function deleteExpense(id) {
+        const expenses = getExpenses().filter(expense => expense.id !== id);
+        saveExpenses(expenses);
+        renderExpenses();
+    }
+
+    function editExpense(index) {
+        let expenses = getExpenses();
+        let expense = expenses[index];
+    
+        // Populate the form with the selected expense
+        document.getElementById("expense-name").value = expense.name;
+        document.getElementById("expense-amount").value = expense.amount;
+        document.getElementById("expense-category").value = expense.category;
+        document.getElementById("recurring-checkbox").checked = expense.recurring;
+    
+        // Show frequency only if it's recurring
+        if (expense.recurring) {
+            document.getElementById("recurring-frequency").value = expense.frequency;
+            document.getElementById("recurring-frequency").disabled = false;
+        } else {
+            document.getElementById("recurring-frequency").disabled = true;
+        }
+    
+        editIndex = index; // Store the index of the expense being edited
+    }
+
     function renderExpenses() {
         expenseList.innerHTML = "";
         let total = 0;
-        getExpenses().forEach(expense => {
+        getExpenses().forEach((expense, index) => {
             const listItem = document.createElement("li");
-            listItem.textContent = `${expense.name} - ₹${expense.amount} (${expense.category})${expense.recurring ? ` - Recurs ${expense.frequency}` : ''}`;
+    
+            const text = document.createElement("span");
+            text.textContent = `${expense.name} - ₹${expense.amount} (${expense.category})${expense.recurring ? ` - Recurs ${expense.frequency}` : ''}`;
+    
+            const buttonContainer = document.createElement("div");
+            buttonContainer.classList.add("button-container");
+    
+            const editButton = document.createElement("button");
+            editButton.classList.add("edit");
+            editButton.innerHTML = "✏️";
+            editButton.onclick = () => editExpense(index);
+    
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("delete");
+            deleteButton.innerHTML = "❌";
+            deleteButton.onclick = () => deleteExpense(index);
+    
+            buttonContainer.appendChild(editButton);
+            buttonContainer.appendChild(deleteButton);
+    
+            listItem.appendChild(text);
+            listItem.appendChild(buttonContainer);
             expenseList.appendChild(listItem);
+    
             total += parseFloat(expense.amount);
         });
         totalAmount.textContent = total.toFixed(2);
+    }
+
+    let editIndex = -1;
+    function editExpense(index) {
+        let expenses = getExpenses();
+        let expense = expenses[index];
+    
+        document.getElementById("expense-name").value = expense.name;
+        document.getElementById("expense-amount").value = expense.amount;
+        document.getElementById("expense-category").value = expense.category;
+        document.getElementById("recurring-checkbox").checked = expense.recurring;
+    
+        if (expense.recurring) {
+            document.getElementById("recurring-frequency").value = expense.frequency;
+            document.getElementById("recurring-frequency").disabled = false;
+        } else {
+            document.getElementById("recurring-frequency").disabled = true;
+        }
+    
+        editIndex = index; // ✅ Store the index for updating
+    }
+    
+    function deleteExpense(index) {
+        const expenses = getExpenses();
+        expenses.splice(index, 1); // Remove the selected expense
+        saveExpenses(expenses);
+        renderExpenses();
     }
 
     function checkRecurringExpenses() {
@@ -50,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (expense.recurring && expense.frequency === "monthly") {
                 const expenseDate = new Date(expense.date);
                 if (today.getMonth() !== expenseDate.getMonth()) {
-                    updatedExpenses.push({ ...expense, date: today.toISOString() });
+                    updatedExpenses.push({ ...expense, date: today.toISOString(), id: Date.now() });
                 }
             }
         });
@@ -59,7 +135,6 @@ document.addEventListener("DOMContentLoaded", function () {
         renderExpenses();
     }
 
-    // Login Logic
     loginForm.addEventListener("submit", function (event) {
         event.preventDefault();
         showApp();
@@ -90,6 +165,39 @@ document.addEventListener("DOMContentLoaded", function () {
         appSection.style.display = "none";
         loginSection.style.display = "block";
     });
+
+    document.getElementById("expense-form").addEventListener("submit", function (event) {
+        event.preventDefault();
+    
+        const name = document.getElementById("expense-name").value.trim();
+        const amount = document.getElementById("expense-amount").value.trim();
+        const category = document.getElementById("expense-category").value.trim();
+        const recurring = document.getElementById("recurring-checkbox").checked;
+        const frequency = recurring ? document.getElementById("recurring-frequency").value : null;
+    
+        if (!name || !amount || isNaN(amount) || !category) {
+            alert("Please fill all fields correctly.");
+            return;
+        }
+    
+        let expenses = getExpenses();
+    
+        if (editIndex !== -1) {
+            // ✅ Update existing expense
+            expenses[editIndex] = { name, amount, category, recurring, frequency };
+            editIndex = -1; // ✅ Reset edit mode after updating
+        } else {
+            // ✅ Add a new expense
+            expenses.push({ name, amount, category, recurring, frequency });
+        }
+    
+        saveExpenses(expenses);
+        renderExpenses();
+        expenseForm.reset();
+        document.getElementById("recurring-frequency").disabled = true;
+    });
+    
+    
 
     if (localStorage.getItem("expenses")) {
         showApp();
